@@ -8,7 +8,7 @@
         <span>{{ entityDetailsLinkName | titlecase}}&nbsp;</span>
       </a>
     </span>
-    <ng-template #bestName><a class="search__link">{{searchResult?.bestName}}</a></ng-template>
+    <ng-template #bestName><a class="search__link">{{bestName}}</a></ng-template>
     <div *ngIf="breakDownInfoExist" class="breakdown-container">
       <span *ngFor="let info of breakDownInfo"
             class="search-card__header--breakdown ellipsis">
