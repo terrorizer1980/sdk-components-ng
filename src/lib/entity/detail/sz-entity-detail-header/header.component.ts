@@ -9,10 +9,11 @@ import {
   SzRelatedEntity,
   SzEntityRecord,
   SzRelationshipType,
-  SzEntityFeature
+  SzEntityFeature,
+  SzResolvedEntity
 } from '@senzing/rest-api-client-ng';
 
-import { bestEntityName } from '../../entity-utiils';
+import { bestEntityName } from '../../entity-utils';
 
 /**
  * @internal
@@ -33,7 +34,7 @@ export class SzEntityDetailHeaderComponent implements OnInit, OnDestroy {
     {cssClass: 'layout-wide', minWidth: 1021 },
     {cssClass: 'layout-medium', minWidth: 700, maxWidth: 1120 },
     {cssClass: 'layout-narrow', maxWidth: 699 }
-  ]
+  ];
   public _layoutClasses: string[] = [];
   @Input() public set layoutClasses(value: string[] | string){
     if(value && value !== undefined) {

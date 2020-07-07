@@ -4,7 +4,7 @@ import { SzResolvedEntity, SzDataSourceRecordSummary } from '@senzing/rest-api-c
 import { SzPrefsService } from '../../../services/sz-prefs.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { bestEntityName } from '../../entity-utiils';
+import { bestEntityName } from '../../entity-utils';
 
 /**
  * @internal
