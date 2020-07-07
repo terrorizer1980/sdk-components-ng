@@ -1,14 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { SzSearchResultEntityData } from '../../../models/responces/search-results/sz-search-result-entity-data';
-import { SzEntityDetailSectionData } from '../../../models/entity-detail-section-data';
-import {
-  SzEntityData,
-  SzResolvedEntity,
-  SzEntityRecord
-} from '@senzing/rest-api-client-ng';
-import { Subject, BehaviorSubject } from 'rxjs';
-import { tap, takeUntil } from 'rxjs/operators';
-import { SzPrefsService } from '../../../services/sz-prefs.service';
+import {ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {SzSearchResultEntityData} from '../../../models/responces/search-results/sz-search-result-entity-data';
+import {SzEntityDetailSectionData} from '../../../models/entity-detail-section-data';
+import {SzEntityRecord} from '@senzing/rest-api-client-ng';
+import {BehaviorSubject, Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {SzPrefsService} from '../../../services/sz-prefs.service';
 
 
 /**
@@ -32,6 +28,7 @@ export class SzEntityRecordCardContentComponent implements OnInit {
   private _showNameData: boolean = true;
   private _showBestNameOnly: boolean = false;
   private _ignorePrefOtherDataChanges = false;
+  @Input() public showEmptyColumns: boolean = true;
   @Input() public showRecordIdWhenNative: boolean = false;
   @Input() public set ignorePrefOtherDataChanges(value: boolean) {
     this._ignorePrefOtherDataChanges = value;
@@ -156,7 +153,11 @@ export class SzEntityRecordCardContentComponent implements OnInit {
     }
     return 0;
   }
+
   get showColumnOne(): boolean {
+    if (this.showEmptyColumns) {
+      return true;
+    }
     let retVal = false;
     if(this.entity) {
       if(this.showOtherData && this.entity.otherData && this.entity.otherData.length > 0) {
@@ -165,25 +166,37 @@ export class SzEntityRecordCardContentComponent implements OnInit {
     }
     return retVal;
   }
+
   get columnTwoTotal(): number {
     return (this.nameData.concat(this.attributeData).length);
   }
+
   get showColumnTwo(): boolean {
-    const nameAndAttrData = this.getNameAndAttributeData(this.nameData, this.attributeData);
-    return this._showNameData && nameAndAttrData.length > 0;
+    return this.showEmptyColumns || (this._showNameData && this.hasNameAndAttributeData());
   }
+
+  private hasNameAndAttributeData() {
+    return this.getNameAndAttributeData(this.nameData, this.attributeData).length > 0;
+  }
+
   get columnThreeTotal(): number {
     return (this.addressData.concat(this.phoneData).length);
   }
+
   get showColumnThree(): boolean {
-    const phoneAndAddrData = this.getAddressAndPhoneData(this.addressData, this.phoneData);
-    return (phoneAndAddrData && phoneAndAddrData.length > 0);
+    return this.showEmptyColumns || this.hasAddressAndPhoneData();
   }
+
+  private hasAddressAndPhoneData() {
+    return (this.getAddressAndPhoneData(this.addressData, this.phoneData) && this.getAddressAndPhoneData(this.addressData, this.phoneData).length > 0);
+  }
+
   get columnFourTotal(): number {
     return this.identifierData.length;
   }
+
   public get showColumnFour(): boolean {
-    return this.identifierData.length > 0;
+    return this.showEmptyColumns || (this.identifierData.length > 0);
   }
   // -----------------  end total getters  -------------------
 
