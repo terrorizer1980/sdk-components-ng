@@ -28,7 +28,7 @@ export class SzEntityRecordCardContentComponent implements OnInit {
   private _showNameData: boolean = true;
   private _showBestNameOnly: boolean = false;
   private _ignorePrefOtherDataChanges = false;
-  @Input() public showEmptyColumns: boolean = true;
+  private _showEmptyColumns: boolean = true;
   @Input() public showRecordIdWhenNative: boolean = false;
   @Input() public set ignorePrefOtherDataChanges(value: boolean) {
     this._ignorePrefOtherDataChanges = value;
@@ -128,6 +128,9 @@ export class SzEntityRecordCardContentComponent implements OnInit {
     if( prefs.truncateOtherDataInRecordsAt) {
       this._truncateOtherDataAt = prefs.truncateOtherDataInRecordsAt;
     }
+    if (prefs.showAllEntityColumns) {
+      this._showEmptyColumns = prefs.showAllEntityColumns;
+    }
     if( !this.ignorePrefOtherDataChanges && typeof prefs.showOtherData == 'boolean') {
       this._showOtherData = prefs.showOtherDataInRecords;
       //console.warn(`SzEntityRecordCardContentComponent.onPrefsChange: value of this.showOtherData(${this.showOtherData}) is "${prefs.showOtherDataInRecords }" `);
@@ -155,7 +158,7 @@ export class SzEntityRecordCardContentComponent implements OnInit {
   }
 
   get showColumnOne(): boolean {
-    if (this.showEmptyColumns) {
+    if (this._showEmptyColumns) {
       return true;
     }
     let retVal = false;
@@ -172,7 +175,7 @@ export class SzEntityRecordCardContentComponent implements OnInit {
   }
 
   get showColumnTwo(): boolean {
-    return this.showEmptyColumns || (this._showNameData && this.hasNameAndAttributeData());
+    return this._showEmptyColumns || (this._showNameData && this.hasNameAndAttributeData());
   }
 
   private hasNameAndAttributeData() {
@@ -184,7 +187,7 @@ export class SzEntityRecordCardContentComponent implements OnInit {
   }
 
   get showColumnThree(): boolean {
-    return this.showEmptyColumns || this.hasAddressAndPhoneData();
+    return this._showEmptyColumns || this.hasAddressAndPhoneData();
   }
 
   private hasAddressAndPhoneData() {
@@ -196,7 +199,7 @@ export class SzEntityRecordCardContentComponent implements OnInit {
   }
 
   public get showColumnFour(): boolean {
-    return this.showEmptyColumns || (this.identifierData.length > 0);
+    return this._showEmptyColumns || (this.identifierData.length > 0);
   }
   // -----------------  end total getters  -------------------
 

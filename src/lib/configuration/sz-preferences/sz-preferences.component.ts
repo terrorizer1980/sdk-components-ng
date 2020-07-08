@@ -322,6 +322,14 @@ export class SzPreferencesComponent implements OnInit, OnDestroy {
   @Input() public set EntityDetailTruncateOtherDataInRecordsAt(value: number) {
     this.prefs.entityDetail.truncateOtherDataInRecordsAt = value;
   }
+  /** Show all columns in matches section, including those with no data */
+  public get EntityDetailShowAllMatchesColumns(): boolean {
+    return this.prefs.entityDetail.showAllMatchesColumns;
+  }
+  /** Show all columns in matches section, including those with no data */
+  @Input() public set EntityDetailShowAllMatchesColumns(value: boolean) {
+    this.prefs.entityDetail.showAllMatchesColumns = value;
+  }
   /** collapse graph section when no graphable relationships present in entity detail component */
   public get EntityDetailHideGraphWhenZeroRelations(): boolean {
     return this.prefs.entityDetail.hideGraphWhenZeroRelations;
