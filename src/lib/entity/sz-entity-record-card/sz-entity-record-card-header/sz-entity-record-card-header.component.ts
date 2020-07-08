@@ -4,6 +4,7 @@ import { SzResolvedEntity, SzDataSourceRecordSummary } from '@senzing/rest-api-c
 import { SzPrefsService } from '../../../services/sz-prefs.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { bestEntityName } from '../../entity-utils';
 
 /**
  * @internal
@@ -21,6 +22,9 @@ export class SzEntityRecordCardHeaderComponent implements OnInit, OnDestroy {
   @Input() entityData: SzResolvedEntity;
   @Input() showRecordIdWhenSingleRecord: boolean = false;
   @Input() public layoutClasses: string[] = [];
+
+  private _bestName : string = null;
+  private _bestNameEntity: SzResolvedEntity = null;
 
   /** subscription to notify subscribers to unbind */
   public unsubscribe$ = new Subject<void>();
@@ -54,6 +58,22 @@ export class SzEntityRecordCardHeaderComponent implements OnInit, OnDestroy {
     ).subscribe( this.onPrefsChange.bind(this) );
   }
 
+  get bestName(): string {
+    const resolvedEntity = (this.searchResult && this.searchResult.resolvedEntity)
+      ? this.searchResult.resolvedEntity : this.entityData;
+
+    if (this._bestName && this._bestNameEntity === resolvedEntity) {
+      return this._bestName;
+    }
+    if (!this.searchResult && !this.entityData) {
+      return bestEntityName(null);
+    }
+
+    this._bestName = bestEntityName(resolvedEntity);
+    this._bestNameEntity = resolvedEntity;
+    return this._bestName;
+  }
+
   get breakDownInfoExist(): boolean {
     if (this.searchResult && this.searchResult.resolvedEntity) {
       return this.searchResult.resolvedEntity.recordSummaries.length > 0;
@@ -73,13 +93,7 @@ export class SzEntityRecordCardHeaderComponent implements OnInit, OnDestroy {
   }
 
   get entityDetailsLinkName(): string {
-    if (this.searchResult && this.searchResult.resolvedEntity) {
-      return this.searchResult.resolvedEntity.bestName;
-    } else if(this.entityData && this.entityData.bestName) {
-      return this.entityData.bestName;
-    } else if(this.entityData && this.entityData.entityName) {
-      return this.entityData.entityName;
-    }
+    return this.bestName;
   }
 
   get entityDetailsLink(): string | boolean {

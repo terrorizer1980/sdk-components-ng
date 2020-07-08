@@ -9,8 +9,11 @@ import {
   SzRelatedEntity,
   SzEntityRecord,
   SzRelationshipType,
-  SzEntityFeature
+  SzEntityFeature,
+  SzResolvedEntity
 } from '@senzing/rest-api-client-ng';
+
+import { bestEntityName } from '../../entity-utils';
 
 /**
  * @internal
@@ -31,7 +34,7 @@ export class SzEntityDetailHeaderComponent implements OnInit, OnDestroy {
     {cssClass: 'layout-wide', minWidth: 1021 },
     {cssClass: 'layout-medium', minWidth: 700, maxWidth: 1120 },
     {cssClass: 'layout-narrow', maxWidth: 699 }
-  ]
+  ];
   public _layoutClasses: string[] = [];
   @Input() public set layoutClasses(value: string[] | string){
     if(value && value !== undefined) {
@@ -46,6 +49,9 @@ export class SzEntityDetailHeaderComponent implements OnInit, OnDestroy {
     return this._layoutClasses;
   }
   @Input() public forceLayout: boolean = false;
+
+  private _bestName: string = null;
+  private _bestNameEntity: SzEntityData = null;
 
   /**
    * A list of the search results that are matches.
@@ -92,17 +98,17 @@ export class SzEntityDetailHeaderComponent implements OnInit, OnDestroy {
    * @readonly
    */
   public get bestName(): string {
-    if(this.entity) {
-      if(this.entity.resolvedEntity.bestName) {
-        return this.entity.resolvedEntity.bestName.trim();
-      } else if(this.entity.resolvedEntity.entityName) {
-        return this.entity.resolvedEntity.entityName.trim();
-      } else if(this.entity.resolvedEntity.nameData.length > 0) {
-        return this.entity.resolvedEntity.nameData[1];
-      }
+    if (this._bestName && this._bestNameEntity === this.entity) {
+      return this._bestName;
     }
-    return "";
+    if (!this.entity) {
+      return bestEntityName(null);
+    }
+    this._bestName = bestEntityName(this.entity.resolvedEntity);
+    this._bestNameEntity = this.entity;
+    return this._bestName;
   }
+
   /**
    * returns "M", "F", or undefined if gender cannot be determined.
    * @param features
