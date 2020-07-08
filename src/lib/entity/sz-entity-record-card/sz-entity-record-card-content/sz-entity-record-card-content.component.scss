@@ -23,11 +23,6 @@
       min-width: 30%;
       margin-right: 2em;
     }
-
-    .search-card__content--column:last-child {
-      flex-grow: 2;
-      margin-right: 0;
-    }
   }
 
   /* set hard column perc widths based on how many cols are showing */
@@ -39,16 +34,26 @@
   .search-card__content--wrapper.columns-two {
     .search-card__content--column   {
       min-width: var(--sz-entity-detail-section-record-card-two-cols-min-width);
+      margin-right: var(--sz-entity-detail-section-record-card-two-cols-margin-right);
     }
   }
   .search-card__content--wrapper.columns-three {
     .search-card__content--column   {
       min-width: var(--sz-entity-detail-section-record-card-three-cols-min-width);
+      margin-right: var(--sz-entity-detail-section-record-card-three-cols-margin-right);
     }
   }
   .search-card__content--wrapper.columns-four {
     .search-card__content--column   {
       min-width: var(--sz-entity-detail-section-record-card-four-cols-min-width);
+      margin-right: var(--sz-entity-detail-section-record-card-four-cols-margin-right);
+    }
+  }
+
+  .search-card__content--wrapper {
+    .search-card__content--column:last-child {
+      flex-grow: 2;
+      margin-right: 0;
     }
   }
 }
