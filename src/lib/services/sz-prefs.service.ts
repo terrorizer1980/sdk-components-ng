@@ -437,6 +437,8 @@ export class SzEntityDetailPrefs extends SzSdkPrefsBase {
   /** @internal */
   private _truncateOtherDataInRecordsAt: number = 5;
   /** @internal */
+  private _showAllMatchesColumns: boolean = true;
+  /** @internal */
   private _hideGraphWhenZeroRelations: boolean = true;
   /** @internal */
   private _showRecordIdWhenNative: boolean = false;
@@ -466,6 +468,7 @@ export class SzEntityDetailPrefs extends SzSdkPrefsBase {
     'showOtherDataInEntities',
     'showOtherDataInSummary',
     'truncateOtherDataInRecordsAt',
+    'showAllMatchesColumns',
     'hideGraphWhenZeroRelations',
     'showRecordIdWhenNative',
     'showTopEntityRecordIdsWhenSingular'
@@ -646,6 +649,15 @@ export class SzEntityDetailPrefs extends SzSdkPrefsBase {
   public set truncateOtherDataInRecordsAt(value: number) {
     this._truncateOtherDataInRecordsAt = value;
     if(!this.bulkSet) this.prefsChanged.next( this.toJSONObject() );
+  }
+  /** Show all columns in matches section, including those with no data */
+  public get showAllMatchesColumns(): boolean {
+    return this._showAllMatchesColumns;
+  }
+  /** Show all columns in matches section, including those with no data */
+  public set showAllMatchesColumns(value: boolean) {
+    this._showAllMatchesColumns = value;
+    if (!this.bulkSet) this.prefsChanged.next( this.toJSONObject() );
   }
   /** hide the graph when 0 relationships in network query are returned for entity */
   public get hideGraphWhenZeroRelations(): boolean {

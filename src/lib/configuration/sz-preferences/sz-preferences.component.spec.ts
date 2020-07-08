@@ -306,6 +306,13 @@ describe('SzPreferencesComponent', () => {
       });
       fixture.componentInstance.EntityDetailTruncateOtherDataInRecordsAt = 9;
     });
+    it('entity detail "showAllMatchColumns" changes to false', (done) => {
+      fixture.componentInstance.prefsChange.subscribe((g: SzSdkPrefsModel) => {
+       expect(g.entityDetail.showAllMatchesColumns).toEqual(false);
+       done();
+      });
+      fixture.componentInstance.EntityDetailShowAllMatchesColumns = false;
+    });
     it('entity detail "hideGraphWhenZeroRelations" changes to true', (done) => {
       fixture.componentInstance.prefsChange.subscribe((g: SzSdkPrefsModel) => {
          expect(g.entityDetail.hideGraphWhenZeroRelations).toEqual(true);
