@@ -128,6 +128,9 @@ export class SzSearchComponent implements OnInit, OnDestroy {
   /** the default amount of searches to store in the search history folio. */
   private rememberLastSearches: number = 20;
 
+  /** warn on name only search with single token */
+  private _warnOnSingleTokenNameSearch = false;
+
   /** whether or not to display search history drop downs. set from searchform prefs */
   public get searchHistoryDisabled(): boolean {
     if(this.prefs && this.prefs.searchForm) {
@@ -180,6 +183,18 @@ export class SzSearchComponent implements OnInit, OnDestroy {
    */
   public get searchHistoryEmail(): string[] {
     return this.getHistoryOptions('EMAIL_ADDRESS');
+  }
+  /** warn on name only search with single token */
+  public get warnOnSingleTokenNameSearch(): boolean | string {
+    return this._warnOnSingleTokenNameSearch;
+  }
+  /** warn on name only search with single token */
+  @Input() public set warnOnSingleTokenNameSearch(value: boolean | string) {
+    if((value as string) && ((value as string).toLowerCase() == 'true' || (value as string).toLowerCase() == 'false')) {
+      this._warnOnSingleTokenNameSearch = (value as string).toLowerCase() == 'true' ? true : false;
+    } else {
+      this._warnOnSingleTokenNameSearch = (value as boolean) ? true : false;
+    }
   }
 
   /** @internal */
@@ -843,7 +858,7 @@ export class SzSearchComponent implements OnInit, OnDestroy {
     } else if(maxWidth){
       return (`(max-width: ${maxWidth}px)`);
     }
-    return
+    return;
   }
 
   /**
@@ -957,6 +972,22 @@ export class SzSearchComponent implements OnInit, OnDestroy {
       this.searchException.next(new Error("null criteria")); //TODO: remove in breaking change release
       this.exception.next( new Error("null criteria") );
       return;
+    } else if(this._warnOnSingleTokenNameSearch) {
+      let nameOnlySearch = false;
+      const sObjKeys    = Object.keys(searchParams);
+      const nameTokens  = searchParams['NAME_FULL'] ? searchParams['NAME_FULL'].split(' ') : undefined;
+      if(searchParams &&
+        searchParams['NAME_FULL'] &&
+        searchParams['COMPANY_NAME_ORG'] &&
+        searchParams['NAME_TYPE'] == "PRIMARY" &&
+        sObjKeys && sObjKeys.length === 3){
+          nameOnlySearch = true;
+        }
+        if(nameOnlySearch && nameTokens && nameTokens.length <= 1) {
+          console.warn('search exception: ', searchParams);
+          this.searchException.emit(new Error("single token name only"));
+          return;
+        }
     }
     this.searchStart.emit(searchParams);
 

@@ -9,8 +9,8 @@ export function JSONScrubber(value: any): any {
     if(!val || val == undefined || val == null || typeof val == 'undefined'){
       return undefined;
     }
-    return val
-  }
+    return val;
+  };
   if(value){
     return JSON.parse(JSON.stringify(value, _repl));
   }
