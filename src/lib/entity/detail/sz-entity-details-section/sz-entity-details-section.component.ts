@@ -237,7 +237,6 @@ export class SzEntityDetailsSectionComponent implements OnDestroy {
   }
 
   public onEntityRecordClick(entityId: number): void {
-    console.log('sz-entity-details-section: ', entityId);
     this.entityRecordClick.emit(entityId);
   }
 

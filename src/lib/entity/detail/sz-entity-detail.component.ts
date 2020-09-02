@@ -569,7 +569,7 @@ export class SzEntityDetailComponent implements OnInit, OnDestroy, AfterViewInit
     });
     // redraw graph on entity change
     if(this.graphComponent && this.graphComponent.reload) {
-      this.graphComponent.reload();
+      this.graphComponent.reload(this.entityId);
     }
     this.dataChanged.next(this.entity);
   }
@@ -634,7 +634,7 @@ export class SzEntityDetailComponent implements OnInit, OnDestroy, AfterViewInit
 
       this.searchService.getEntityById(this._entityId, true).
       pipe(
-        tap(res => console.log('SzSearchService.getEntityById: ' + this._entityId, res))
+        tap(res => console.log('SzEntityDetailComponent.onEntityIdChange.SzSearchService.getEntityById: ' + this._entityId, res))
       ).
       subscribe((entityData: SzEntityData) => {
         // console.log('sz-entity-detail.onEntityIdChange: ', entityData);
