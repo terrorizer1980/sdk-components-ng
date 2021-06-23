@@ -57,7 +57,7 @@ export * from '@senzing/sdk-graph-components';
 export * from './lib/models/folio';
 export { SzBulkDataAnalysis } from './lib/models/data-analysis';
 export { SzBulkLoadStatus } from './lib/models/data-importing';
-export { SzDataSourceRecordAnalysis } from './lib/models/data-sources';
+export { SzDataSourceRecordAnalysis, SzDataSourceComposite } from './lib/models/data-sources';
 export { AdminStreamConnProperties, AdminStreamAnalysisConfig, AdminStreamLoadConfig, AdminStreamUploadRates } from './lib/models/data-admin';
 
 /** export some members of rest client to ease type use */
