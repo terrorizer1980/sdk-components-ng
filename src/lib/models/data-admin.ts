@@ -8,6 +8,8 @@ export interface AdminStreamConnProperties {
     connectionTest: boolean;
     reconnectOnClose: boolean;
     reconnectConsecutiveAttemptLimit: number;
+    path: string,
+    method?: string;
 }
 
 export interface AdminStreamAnalysisConfig {
